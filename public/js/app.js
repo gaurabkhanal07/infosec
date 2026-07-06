@@ -128,20 +128,38 @@ function initializeTheme() {
 }
 
 async function callApi(url, payload) {
-  const response = await fetch(url, {
+  const requestOptions = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(payload)
-  });
+  };
 
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.error || 'Request failed');
+  const pathsToTry = [`/api${url}`, url];
+  let lastError = null;
+
+  for (const requestUrl of pathsToTry) {
+    try {
+      const response = await fetch(requestUrl, requestOptions);
+      const data = await response.json();
+
+      if (response.ok) {
+        return data;
+      }
+
+      if (requestUrl.startsWith('/api') && response.status === 404) {
+        lastError = new Error(data.error || 'Request failed');
+        continue;
+      }
+
+      throw new Error(data.error || 'Request failed');
+    } catch (error) {
+      lastError = error;
+    }
   }
 
-  return data;
+  throw lastError || new Error('Request failed');
 }
 
 railFenceEncryptBtn.addEventListener('click', async () => {

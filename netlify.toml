@@ -1,0 +1,51 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/api/railfence/encrypt"
+  to = "/.netlify/functions/railfence-encrypt"
+  status = 200
+
+[[redirects]]
+  from = "/api/railfence/decrypt"
+  to = "/.netlify/functions/railfence-decrypt"
+  status = 200
+
+[[redirects]]
+  from = "/api/rsa/generate"
+  to = "/.netlify/functions/rsa-generate"
+  status = 200
+
+[[redirects]]
+  from = "/api/rsa/encrypt"
+  to = "/.netlify/functions/rsa-encrypt"
+  status = 200
+
+[[redirects]]
+  from = "/api/rsa/decrypt"
+  to = "/.netlify/functions/rsa-decrypt"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/register"
+  to = "/.netlify/functions/auth-register"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/login"
+  to = "/.netlify/functions/auth-login"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/verify"
+  to = "/.netlify/functions/auth-verify"
+  status = 200
+
+[[redirects]]
+  from = "/api/health"
+  to = "/.netlify/functions/health"
+  status = 200

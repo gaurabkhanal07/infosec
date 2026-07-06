@@ -1,6 +1,8 @@
 # Cryptography Web Application
 
-A single-page Express app for learning three core cryptography concepts:
+A cryptography learning app that now supports Netlify deployment with static frontend pages, Netlify Functions, and blob-backed user storage.
+
+The app teaches three core cryptography concepts:
 
 - Rail Fence Cipher encryption and decryption
 - RSA key generation, encryption, and decryption with visible math steps
@@ -19,8 +21,10 @@ A single-page Express app for learning three core cryptography concepts:
 ## Tech Stack
 
 - Frontend: HTML, CSS, Bootstrap, JavaScript
-- Backend: Node.js, Express.js
-- Storage: Local file-backed user store in `database/users.json`
+- Backend for local dev: Node.js, Express.js
+- Backend for Netlify: Netlify Functions
+- Storage for local dev: Local file-backed user store in `database/users.json`
+- Storage for Netlify: Netlify Blobs
 - Hashing: Node `crypto` module
 
 ## Routes
@@ -61,6 +65,28 @@ npm start
 ```text
 http://localhost:3000
 ```
+
+## Netlify Deployment
+
+1. Push the repo to GitHub.
+2. Create a new site in Netlify and connect the repo.
+3. Use these settings:
+
+```text
+Build command: npm install
+Publish directory: public
+Functions directory: netlify/functions
+```
+
+4. Deploy the site.
+
+The frontend calls `/api/...` routes. In Netlify, these are rewritten to Functions.
+
+## Netlify Notes
+
+- Rail Fence and RSA run as serverless functions.
+- Login uses Netlify Blobs, so user data persists across deploys.
+- The existing Express app is still available for local development.
 
 ## Notes
 
