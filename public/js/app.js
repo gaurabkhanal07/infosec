@@ -136,24 +136,52 @@ async function callApi(url, payload) {
     body: JSON.stringify(payload)
   };
 
-  const pathsToTry = [`/api${url}`, url];
+  const functionPath = (() => {
+    const map = {
+      '/railfence/encrypt': '/.netlify/functions/railfence-encrypt',
+      '/railfence/decrypt': '/.netlify/functions/railfence-decrypt',
+      '/rsa/generate': '/.netlify/functions/rsa-generate',
+      '/rsa/encrypt': '/.netlify/functions/rsa-encrypt',
+      '/rsa/decrypt': '/.netlify/functions/rsa-decrypt',
+      '/auth/register': '/.netlify/functions/auth-register',
+      '/auth/login': '/.netlify/functions/auth-login',
+      '/auth/verify': '/.netlify/functions/auth-verify'
+    };
+
+    return map[url] || null;
+  })();
+
+  const pathsToTry = [
+    `/api${url}`,
+    ...(functionPath ? [functionPath] : []),
+    url
+  ];
   let lastError = null;
 
   for (const requestUrl of pathsToTry) {
     try {
       const response = await fetch(requestUrl, requestOptions);
-      const data = await response.json();
+      const contentType = response.headers.get('content-type') || '';
+      const isJson = contentType.includes('application/json');
+      const data = isJson ? await response.json() : null;
 
       if (response.ok) {
-        return data;
+        if (data) {
+          return data;
+        }
+
+        const text = await response.text();
+        throw new Error(`Non-JSON success response from ${requestUrl}: ${text.slice(0, 120)}`);
       }
 
-      if (requestUrl.startsWith('/api') && response.status === 404) {
-        lastError = new Error(data.error || 'Request failed');
+      const message = data?.error || `Request failed with status ${response.status}`;
+
+      if ((requestUrl.startsWith('/api') || requestUrl.startsWith('/.netlify/functions')) && (response.status === 404 || !isJson)) {
+        lastError = new Error(message);
         continue;
       }
 
-      throw new Error(data.error || 'Request failed');
+      throw new Error(message);
     } catch (error) {
       lastError = error;
     }
