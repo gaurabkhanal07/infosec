@@ -143,9 +143,9 @@ async function callApi(url, payload) {
       '/rsa/generate': '/.netlify/functions/rsa-generate',
       '/rsa/encrypt': '/.netlify/functions/rsa-encrypt',
       '/rsa/decrypt': '/.netlify/functions/rsa-decrypt',
-      '/auth/register': '/.netlify/functions/auth-register',
-      '/auth/login': '/.netlify/functions/auth-login',
-      '/auth/verify': '/.netlify/functions/auth-verify'
+      '/auth/register': '/.netlify/functions/auth/register',
+      '/auth/login': '/.netlify/functions/auth/login',
+      '/auth/verify': '/.netlify/functions/auth/verify'
     };
 
     return map[url] || null;

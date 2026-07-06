@@ -32,17 +32,17 @@
 
 [[redirects]]
   from = "/api/auth/register"
-  to = "/.netlify/functions/auth-register"
+  to = "/.netlify/functions/auth/register"
   status = 200
 
 [[redirects]]
   from = "/api/auth/login"
-  to = "/.netlify/functions/auth-login"
+  to = "/.netlify/functions/auth/login"
   status = 200
 
 [[redirects]]
   from = "/api/auth/verify"
-  to = "/.netlify/functions/auth-verify"
+  to = "/.netlify/functions/auth/verify"
   status = 200
 
 [[redirects]]
