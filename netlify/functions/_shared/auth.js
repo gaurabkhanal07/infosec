@@ -1,16 +1,47 @@
 const crypto = require('crypto');
 
 let cachedStore = null;
+const memoryUsers = new Map();
+
+function createMemoryStoreAdapter() {
+  return {
+    async get(key) {
+      return memoryUsers.has(key) ? memoryUsers.get(key) : null;
+    },
+    async setIfNew(key, value) {
+      if (memoryUsers.has(key)) {
+        return false;
+      }
+
+      memoryUsers.set(key, value);
+      return true;
+    }
+  };
+}
 
 async function getUserStore() {
   if (cachedStore) {
     return cachedStore;
   }
 
-  const blobsModule = await import('@netlify/blobs');
-  cachedStore = blobsModule.getStore('cryptography-users', {
-    consistency: 'strong'
-  });
+  try {
+    const blobsModule = await import('@netlify/blobs');
+    const blobStore = blobsModule.getStore('cryptography-users', {
+      consistency: 'strong'
+    });
+
+    cachedStore = {
+      async get(key) {
+        return blobStore.get(key, { type: 'json' });
+      },
+      async setIfNew(key, value) {
+        const { modified } = await blobStore.setJSON(key, value, { onlyIfNew: true });
+        return modified;
+      }
+    };
+  } catch (error) {
+    cachedStore = createMemoryStoreAdapter();
+  }
 
   return cachedStore;
 }
@@ -73,7 +104,7 @@ function usernameKey(username) {
 async function findUserByUsername(username) {
   const key = usernameKey(username);
   const userStore = await getUserStore();
-  return userStore.get(key, { type: 'json' });
+  return userStore.get(key);
 }
 
 async function createUser(user) {
@@ -85,7 +116,7 @@ async function createUser(user) {
 
   const key = usernameKey(record.username);
   const userStore = await getUserStore();
-  const { modified } = await userStore.setJSON(key, record, { onlyIfNew: true });
+  const modified = await userStore.setIfNew(key, record);
 
   if (!modified) {
     throw new Error('Username already exists');
