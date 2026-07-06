@@ -26,7 +26,8 @@ async function getUserStore() {
 
   try {
     const blobsModule = await import('@netlify/blobs');
-    const blobStore = blobsModule.getStore('cryptography-users', {
+    const blobStore = blobsModule.getStore({
+      name: 'cryptography-users',
       consistency: 'strong'
     });
 
