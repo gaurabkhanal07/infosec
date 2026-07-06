@@ -1,10 +1,19 @@
 const crypto = require('crypto');
-const { getStore } = require('@netlify/blobs');
 
-const userStore = getStore({
-  name: 'cryptography-users',
-  consistency: 'strong'
-});
+let cachedStore = null;
+
+async function getUserStore() {
+  if (cachedStore) {
+    return cachedStore;
+  }
+
+  const blobsModule = await import('@netlify/blobs');
+  cachedStore = blobsModule.getStore('cryptography-users', {
+    consistency: 'strong'
+  });
+
+  return cachedStore;
+}
 
 function normalizeAlgorithm(algorithm) {
   const value = String(algorithm ?? 'sha256').toLowerCase();
@@ -63,6 +72,7 @@ function usernameKey(username) {
 
 async function findUserByUsername(username) {
   const key = usernameKey(username);
+  const userStore = await getUserStore();
   return userStore.get(key, { type: 'json' });
 }
 
@@ -74,6 +84,7 @@ async function createUser(user) {
   };
 
   const key = usernameKey(record.username);
+  const userStore = await getUserStore();
   const { modified } = await userStore.setJSON(key, record, { onlyIfNew: true });
 
   if (!modified) {
