@@ -1,5 +1,4 @@
 const toastContainer = document.getElementById('toastContainer');
-const themeToggle = document.getElementById('themeToggle');
 
 const railFencePlaintext = document.getElementById('railFencePlaintext');
 const railFenceRailsEncrypt = document.getElementById('railFenceRailsEncrypt');
@@ -116,17 +115,6 @@ function setStrength(password) {
   const labels = ['Weak', 'Fair', 'Good', 'Strong', 'Very strong'];
   passwordStrengthLabel.textContent = labels[Math.max(0, score - 1)] || 'Weak';
 }
-
-function applyTheme(theme) {
-  document.body.classList.toggle('light-theme', theme === 'light');
-  localStorage.setItem('cryptography-theme', theme);
-}
-
-function initializeTheme() {
-  const savedTheme = localStorage.getItem('cryptography-theme') || 'dark';
-  applyTheme(savedTheme);
-}
-
 async function callApi(url, payload) {
   const requestOptions = {
     method: 'POST',
@@ -335,10 +323,4 @@ document.querySelectorAll('.copy-btn').forEach(button => {
   });
 });
 
-themeToggle.addEventListener('click', () => {
-  const isLight = document.body.classList.contains('light-theme');
-  applyTheme(isLight ? 'dark' : 'light');
-});
-
-initializeTheme();
 setStrength('');
