@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cryptography Web Application</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="bg-orb bg-orb-a"></div>
+  <div class="bg-orb bg-orb-b"></div>
+
+  <header class="navbar navbar-expand-lg navbar-dark sticky-top app-nav">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand fw-bold" href="#home">Cryptography Web App</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="#rail-fence">Rail Fence</a></li>
+          <li class="nav-item"><a class="nav-link" href="#rsa">RSA</a></li>
+          <li class="nav-item"><a class="nav-link" href="#auth">Login</a></li>
+          <li class="nav-item ms-lg-2">
+            <button class="btn btn-outline-light btn-sm" id="themeToggle" type="button">Toggle Theme</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main class="container py-4 py-lg-5">
+    <section id="home" class="hero card-panel mb-4 mb-lg-5">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+          <span class="eyebrow">Interactive cryptography lab</span>
+          <h1 class="display-5 fw-bold mt-3">Cryptography Web Application</h1>
+          <p class="lead mt-3">
+            Explore Rail Fence transposition, RSA key generation with visible math, and password hashing with SHA-256 or MD5.
+          </p>
+          <div class="d-flex flex-wrap gap-2 mt-4">
+            <a class="btn btn-accent" href="#rail-fence">Rail Fence Cipher</a>
+            <a class="btn btn-accent-secondary" href="#rsa">RSA Encryption</a>
+            <a class="btn btn-outline-light" href="#auth">Login Authentication</a>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="hero-stats">
+            <div class="stat-box">
+              <span>Rail Fence</span>
+              <strong>Encrypt / Decrypt</strong>
+            </div>
+            <div class="stat-box">
+              <span>RSA</span>
+              <strong>Generate / Encrypt / Decrypt</strong>
+            </div>
+            <div class="stat-box">
+              <span>Login System</span>
+              <strong>Hash / Verify Password</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rail-fence" class="card-panel mb-4 mb-lg-5">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">1. Rail Fence Cipher</span>
+          <h2>Encrypt and decrypt text with the zig-zag pattern</h2>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-5">
+          <div class="feature-card">
+            <label class="form-label" for="railFencePlaintext">Plaintext</label>
+            <textarea class="form-control crypto-input" id="railFencePlaintext" rows="4" placeholder="HELLOWORLD"></textarea>
+            <div class="row g-2 mt-3">
+              <div class="col-sm-6">
+                <label class="form-label" for="railFenceRailsEncrypt">Number of Rails</label>
+                <input class="form-control crypto-input" id="railFenceRailsEncrypt" type="number" min="2" value="3" />
+              </div>
+            </div>
+            <div class="d-flex flex-wrap gap-2 mt-3">
+              <button class="btn btn-accent" id="railFenceEncryptBtn" type="button">Encrypt</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="feature-card h-100">
+            <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap">
+              <h3 class="h5 mb-0">Encrypted Result</h3>
+              <button class="btn btn-sm btn-outline-light copy-btn" data-copy-target="railFenceCiphertext" type="button">Copy</button>
+            </div>
+            <div class="result-box mt-3" id="railFenceCiphertext">Encrypted text will appear here.</div>
+            <div class="mt-4">
+              <h3 class="h6">Rail Matrix</h3>
+              <div class="matrix-wrap" id="railFenceMatrix"></div>
+            </div>
+            <div class="mt-4">
+              <h3 class="h6">Traversal</h3>
+              <div class="result-box small" id="railFenceSteps">The zig-zag traversal will be shown here.</div>
+            </div>
+            <hr class="my-4 border-secondary-subtle" />
+            <label class="form-label" for="railFenceCipherInput">Ciphertext</label>
+            <textarea class="form-control crypto-input" id="railFenceCipherInput" rows="3" placeholder="Encrypted text"></textarea>
+            <div class="row g-2 mt-3 align-items-end">
+              <div class="col-sm-6">
+                <label class="form-label" for="railFenceRailsDecrypt">Rails</label>
+                <input class="form-control crypto-input" id="railFenceRailsDecrypt" type="number" min="2" value="3" />
+              </div>
+              <div class="col-sm-6">
+                <button class="btn btn-accent-secondary w-100" id="railFenceDecryptBtn" type="button">Decrypt</button>
+              </div>
+            </div>
+            <div class="mt-4">
+              <h3 class="h6">Plaintext</h3>
+              <div class="result-box" id="railFencePlainResult">Decrypted text will appear here.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rsa" class="card-panel mb-4 mb-lg-5">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">2. RSA Encryption</span>
+          <h2>Generate keys and walk through the math</h2>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="feature-card h-100">
+            <h3 class="h5">Key Generation</h3>
+            <p class="text-secondary-emphasis">Create a fresh educational RSA key pair and reveal p, q, n, φ(n), e, and d.</p>
+            <button class="btn btn-accent" id="rsaGenerateBtn" type="button">Generate Keys</button>
+            <div class="mt-4">
+              <div class="mini-label">Public Key (e, n)</div>
+              <div class="result-box small" id="rsaPublicKey">Not generated yet.</div>
+              <button class="btn btn-sm btn-outline-light mt-2 copy-btn" data-copy-target="rsaPublicKey" type="button">Copy Public Key</button>
+            </div>
+            <div class="mt-4">
+              <div class="mini-label">Private Key (d, n)</div>
+              <div class="result-box small" id="rsaPrivateKey">Not generated yet.</div>
+              <button class="btn btn-sm btn-outline-light mt-2 copy-btn" data-copy-target="rsaPrivateKey" type="button">Copy Private Key</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="feature-card h-100">
+            <h3 class="h5">Encrypt</h3>
+            <label class="form-label" for="rsaMessage">Message</label>
+            <textarea class="form-control crypto-input" id="rsaMessage" rows="4" placeholder="HELLO"></textarea>
+            <div class="mt-3">
+              <label class="form-label" for="rsaEncryptPublicKey">Public Key</label>
+              <input class="form-control crypto-input" id="rsaEncryptPublicKey" placeholder="e,n" />
+            </div>
+            <button class="btn btn-accent mt-3" id="rsaEncryptBtn" type="button">Encrypt</button>
+            <div class="mt-4">
+              <div class="mini-label">Ciphertext</div>
+              <div class="result-box small" id="rsaCiphertext">Ciphertext will appear here.</div>
+              <button class="btn btn-sm btn-outline-light mt-2 copy-btn" data-copy-target="rsaCiphertext" type="button">Copy Ciphertext</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="feature-card h-100">
+            <h3 class="h5">Decrypt</h3>
+            <label class="form-label" for="rsaCipherInput">Ciphertext</label>
+            <textarea class="form-control crypto-input" id="rsaCipherInput" rows="4" placeholder="298347239847"></textarea>
+            <div class="mt-3">
+              <label class="form-label" for="rsaDecryptPrivateKey">Private Key</label>
+              <input class="form-control crypto-input" id="rsaDecryptPrivateKey" placeholder="d,n" />
+            </div>
+            <button class="btn btn-accent-secondary mt-3" id="rsaDecryptBtn" type="button">Decrypt</button>
+            <div class="mt-4">
+              <div class="mini-label">Plaintext</div>
+              <div class="result-box small" id="rsaPlaintext">Plaintext will appear here.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="feature-card mt-4">
+        <h3 class="h5">RSA Steps</h3>
+        <div class="result-box small" id="rsaSteps">Key generation steps will appear here.</div>
+      </div>
+    </section>
+
+    <section id="auth" class="card-panel mb-4 mb-lg-5">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">3. Login System</span>
+          <h2>Register, log in, and verify hashed passwords</h2>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="feature-card h-100">
+            <h3 class="h5">Register</h3>
+            <label class="form-label" for="registerUsername">Username</label>
+            <input class="form-control crypto-input" id="registerUsername" />
+            <label class="form-label mt-3" for="registerPassword">Password</label>
+            <input class="form-control crypto-input" id="registerPassword" type="password" />
+            <div class="strength-wrap mt-3">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="mini-label">Password strength</span>
+                <span id="passwordStrengthLabel">Weak</span>
+              </div>
+              <div class="progress strength-meter">
+                <div class="progress-bar" id="passwordStrengthBar" style="width: 0%"></div>
+              </div>
+            </div>
+            <label class="form-label mt-3" for="registerAlgorithm">Hash Algorithm</label>
+            <select class="form-select crypto-input" id="registerAlgorithm">
+              <option value="sha256" selected>SHA-256</option>
+              <option value="md5">MD5</option>
+            </select>
+            <button class="btn btn-accent mt-3" id="registerBtn" type="button">Register</button>
+            <div class="mt-4">
+              <div class="mini-label">Hash Process</div>
+              <div class="result-box small" id="registerHashFlow">Plaintext → Hash → Store in database</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="feature-card h-100">
+            <h3 class="h5">Login</h3>
+            <label class="form-label" for="loginUsername">Username</label>
+            <input class="form-control crypto-input" id="loginUsername" />
+            <label class="form-label mt-3" for="loginPassword">Password</label>
+            <input class="form-control crypto-input" id="loginPassword" type="password" />
+            <button class="btn btn-accent-secondary mt-3" id="loginBtn" type="button">Login</button>
+            <div class="mt-4">
+              <div class="mini-label">Login Result</div>
+              <div class="result-box small" id="loginResult">Enter credentials to log in.</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="feature-card h-100">
+            <h3 class="h5">Verify Password</h3>
+            <label class="form-label" for="verifyUsername">Username</label>
+            <input class="form-control crypto-input" id="verifyUsername" />
+            <label class="form-label mt-3" for="verifyPassword">Password</label>
+            <input class="form-control crypto-input" id="verifyPassword" type="password" />
+            <button class="btn btn-outline-light mt-3" id="verifyBtn" type="button">Verify Password</button>
+            <div class="mt-4">
+              <div class="mini-label">Verification</div>
+              <div class="result-box small" id="verifyResult">Hash comparison will appear here.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
